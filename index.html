@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style media="screen">
+        form{
+            position: absolute;
+            bottom: 0%;
+            width: 100%;
+            background: grey;
+            padding: 20px;
+
+        }
+        #user_name{
+            float: left;
+            width: 30%;
+            height: 30px; border: none; 
+            margin-left: 10px;
+            background-color: black;
+            font-weight: bold; color: white;
+        }
+        #text_box{
+            float: left;
+            width: 40%;
+            height: 30px; border: none; 
+        }
+        button{
+            float: left; width: 20%; height: 33px;
+        }
+        .hidden{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="homepage">
+        <h1>selamat datang di chatroom</h1>
+        <input type="text" id="user_name" placeholder="nama kamu"><button id="masuk">masuk</button>
+    </div>
+<div id="chatroom" class="hidden">
+<ul id="message"></ul>
+
+<form action="">
+    
+    <input type="text" id="text_box"> <button>kirim</button>
+
+</form>
+</div>
+
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js"></script>
+
+    <script>
+        var socket =io();
+        var username ='';
+        $('form').submit(function(){
+            username = $('#user_name').val();
+            socket.emit('newMessage',$('#text_box').val());
+            $('#text_box').val('');
+            return false;
+        });
+        socket.on('newMessage',function(msg){
+            $('#message').append($('<li>').text(username + ' '  + msg + ' ' + Date()));
+
+        });
+        $('#masuk').click(function(){
+            $('#chatroom').removeClass('hidden');
+            $('#homepage').addClass('hidden');
+
+        });
+    </script>
+</body>
+</html>
